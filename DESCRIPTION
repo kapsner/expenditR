@@ -1,0 +1,28 @@
+Package: expenditR
+Title: A shiny base app
+Version: 0.0.0.9001
+Authors@R: 
+    person(given = "Lorenz",
+           family = "Kapsner",
+           role = c("cre", "aut"),
+           email = "lorenz.kapsner@web.de")
+Description: Organize expenditures with your roommates.
+License: GPL-3
+LazyData: true
+URL: https://github.com/kapsner/expenditR
+BugReports: https://github.com/kapsner/expenditR/issues
+Encoding: UTF-8
+Date/Publication: 2019-09-15 08:35:01 UTC
+Imports: 
+    data.table,
+    shiny,
+    shinydashboard,
+    shinyjs,
+    magrittr,
+    stats,
+    DT,
+    jsonlite
+Suggests: 
+    testthat,
+    processx
+RoxygenNote: 6.1.1

@@ -1,0 +1,2 @@
+library(expenditR)
+launchApp()
