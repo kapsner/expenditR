@@ -5,6 +5,8 @@ shiny::shinyServer(function(input, output, session) {
         roommates = list(),
         storedir = storedir,
         no_mates = TRUE,
+        no_community = TRUE,
+        summary = list(),
         community_data = data.table::data.table(cbind(
             "Buyer" = character(0),
             "Note" = character(0),
@@ -82,4 +84,23 @@ shiny::shinyServer(function(input, output, session) {
         updateNumericInput(session, inputId = "moduleCommunity-community_money", value = 0)
     })
     
+    
+    ######################
+    ## Community Expenditures Tab
+    ######################
+    shiny::callModule(moduleSummaryServer, "moduleSummary", rv=rv, input_re=reactive({input}))
+    
+    observe({
+        req(rv$no_community)
+        
+        if (nrow(rv$community_data) > 0){
+            output$menu <- shinydashboard::renderMenu({
+                shinydashboard::sidebarMenu(
+                    shinydashboard::menuItem("Community Expenditures", tabName = "community", icon = icon("table")),
+                    shinydashboard::menuItem("Expenditures Summary", tabName = "summary", icon = icon("table"))
+                )
+            })
+            rv$no_community <- FALSE
+        }
+    })
 })
