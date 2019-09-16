@@ -75,22 +75,26 @@ moduleCommunityServer <- function(input, output, session, rv, input_re){
   })
   
   observe({
-    for (n in names(rv$roommates)){
-      if  (n %in% unique(rv$community_data[,get("Buyer")])){
-        rv$summary[[n]] <- sum(as.numeric(rv$community_data[get("Buyer")==n,get("Money")]))
-      }
-      
-      s_dat <- t(data.table::as.data.table(rv$summary))
-      s_tab <- data.table::data.table(
-        cbind(
-          rownames(s_dat),
-          s_dat
+    req(rv$community_data)
+    
+    if (nrow(rv$community_data)>0){
+      for (n in names(rv$roommates)){
+        if  (n %in% unique(rv$community_data[,get("Buyer")])){
+          rv$summary[[n]] <- sum(as.numeric(rv$community_data[get("Buyer")==n,get("Money")]))
+        }
+        
+        s_dat <- t(data.table::as.data.table(rv$summary))
+        s_tab <- data.table::data.table(
+          cbind(
+            rownames(s_dat),
+            s_dat
+          )
         )
-      )
-      colnames(s_tab) <- c(" ", "Expenditures")
-      rv$summary_table <- s_tab
-      
-      rv$community_total <- sum(as.numeric(rv$summary_table[,get("Expenditures")]))
+        colnames(s_tab) <- c(" ", "Expenditures")
+        rv$summary_table <- s_tab
+        
+        rv$community_total <- sum(as.numeric(rv$summary_table[,get("Expenditures")]))
+      }
     }
   })
 }
