@@ -39,6 +39,10 @@ shiny::shinyUI(
           
           shinydashboard::tabItem(tabName = "community",
                                   moduleCommunityUI("moduleCommunity")
+          ),
+          
+          shinydashboard::tabItem(tabName = "summary",
+                                  moduleSummaryUI("moduleSummary")
           )
         )
       )
