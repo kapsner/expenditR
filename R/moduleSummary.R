@@ -25,11 +25,17 @@ moduleSummaryServer <- function(input, output, session, rv, input_re){
   observe({
     req(rv$community_total)
     
-    output$summary_total <- renderText({
+    output$summary_total <- renderTable({
       rv$community_total
     })
+  })
+  
+  observe({
+    req(rv$community_difference)
     
-    
+    output$summary_differences <- renderTable({
+      rv$community_difference
+    })
   })
 }
 
@@ -53,7 +59,14 @@ moduleSummaryUI <- function(id){
       ),
       box(
         title = "Total Community Expenditures",
-        textOutput(ns("summary_total")),
+        tableOutput(ns("summary_total")),
+        width = 6
+      )
+    ),
+    fluidRow(
+      box(
+        title = "Community Differences",
+        tableOutput(ns("summary_differences")),
         width = 6
       )
     )
