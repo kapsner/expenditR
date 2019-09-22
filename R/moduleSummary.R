@@ -53,20 +53,24 @@ moduleSummaryUI <- function(id){
   tagList(
     fluidRow(
       box(
-        title = "Summary",
+        title = "Community Summary",
         tableOutput(ns("summary_table")),
         width = 6
       ),
       box(
         title = "Total Community Expenditures",
-        tableOutput(ns("summary_total")),
+        column(6,
+               tableOutput(ns("summary_total"))
+        ), 
+        column(6,
+               tableOutput(ns("summary_differences"))
+        ),
         width = 6
       )
     ),
     fluidRow(
       box(
-        title = "Community Differences",
-        tableOutput(ns("summary_differences")),
+        title = "Private Summary",
         width = 6
       )
     )

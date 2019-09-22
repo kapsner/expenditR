@@ -3,6 +3,8 @@
 export(launchApp)
 export(moduleCommunityServer)
 export(moduleCommunityUI)
+export(modulePrivateServer)
+export(modulePrivateUI)
 export(moduleSettingsServer)
 export(moduleSettingsUI)
 export(moduleSummaryServer)

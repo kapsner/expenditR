@@ -12,6 +12,13 @@ shiny::shinyServer(function(input, output, session) {
             "Note" = character(0),
             "Date" = character(0),
             "Money" = numeric(0)
+        )),
+        private_data = data.table::data.table(cbind(
+            "Buyer" = character(0),
+            "Debtor" = character(0),
+            "Note" = character(0),
+            "Date" = character(0),
+            "Money" = numeric(0)
         ))
     )
     
@@ -63,7 +70,8 @@ shiny::shinyServer(function(input, output, session) {
         if (length(rv$roommates) > 0){
             output$menu <- shinydashboard::renderMenu({
                 shinydashboard::sidebarMenu(
-                    shinydashboard::menuItem("Community Expenditures", tabName = "community", icon = icon("table"))
+                    shinydashboard::menuItem("Community Expenditures", tabName = "community", icon = icon("table")),
+                    shinydashboard::menuItem("Private Expenditures", tabName = "private", icon = icon("table"))
                 )
             })
             rv$no_mates <- FALSE
@@ -73,6 +81,7 @@ shiny::shinyServer(function(input, output, session) {
     observe({
         req(rv$roommates)
         shiny::updateSelectInput(session, inputId = "moduleCommunity-community_buyer", choices = rv$roommates)
+        shiny::updateSelectInput(session, inputId = "modulePrivate-private_buyer", choices = rv$roommates)
         shiny::updateSelectInput(session, inputId = "moduleSettings-delete_names", choices = rv$roommates)
     })
     
@@ -86,6 +95,25 @@ shiny::shinyServer(function(input, output, session) {
     
     
     ######################
+    ## Private Expenditures Tab
+    ######################
+    shiny::callModule(modulePrivateServer, "modulePrivate", rv=rv, input_re=reactive({input}))
+    
+    observeEvent(input[["modulePrivate-private_add"]], {
+        updateSelectInput(session, inputId = "modulePrivate-private_buyer", selected = NULL)
+        updateSelectInput(session, inputId = "modulePrivate-private_debtor", selected = NULL)
+        updateTextInput(session, inputId = "modulePrivate-private_note", value = "")
+        updateDateInput(session, inputId = "modulePrivate-private_date", value = NULL)
+        updateNumericInput(session, inputId = "modulePrivate-private_money", value = 0)
+    })
+    
+    observe({
+        if (input[["modulePrivate-private_buyer"]] != ""){
+            updateSelectInput(session, inputId = "modulePrivate-private_debtor", choices = rv$roommates[setdiff(names(rv$roommates), input[["modulePrivate-private_buyer"]])]) 
+        }
+    })
+    
+    ######################
     ## Community Expenditures Tab
     ######################
     shiny::callModule(moduleSummaryServer, "moduleSummary", rv=rv, input_re=reactive({input}))
@@ -97,6 +125,7 @@ shiny::shinyServer(function(input, output, session) {
             output$menu <- shinydashboard::renderMenu({
                 shinydashboard::sidebarMenu(
                     shinydashboard::menuItem("Community Expenditures", tabName = "community", icon = icon("table")),
+                    shinydashboard::menuItem("Private Expenditures", tabName = "private", icon = icon("table")),
                     shinydashboard::menuItem("Expenditures Summary", tabName = "summary", icon = icon("table"))
                 )
             })
