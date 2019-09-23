@@ -1,7 +1,7 @@
 version: '3'
 
 services:
-  base_app:
+  expenditr:
     container_name: expenditr
     image: expenditr
     restart: unless-stopped
