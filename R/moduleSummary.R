@@ -37,6 +37,18 @@ moduleSummaryServer <- function(input, output, session, rv, input_re){
       rv$community_difference
     })
   })
+  
+  observe({
+    req(rv$private_summary)
+    
+    print(rv$private_summary)
+    
+    if (length(rv$private_summary) > 0){
+      output$summary_table_pr <- renderTable({
+        rv$private_summary_table
+      })
+    }
+  })
 }
 
 
@@ -71,6 +83,7 @@ moduleSummaryUI <- function(id){
     fluidRow(
       box(
         title = "Private Summary",
+        tableOutput(ns("summary_table_pr")),
         width = 6
       )
     )

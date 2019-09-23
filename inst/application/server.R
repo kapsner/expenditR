@@ -7,6 +7,7 @@ shiny::shinyServer(function(input, output, session) {
         no_mates = TRUE,
         no_community = TRUE,
         summary = list(),
+        private_summary = list(),
         community_data = data.table::data.table(cbind(
             "Buyer" = character(0),
             "Note" = character(0),
@@ -33,6 +34,13 @@ shiny::shinyServer(function(input, output, session) {
             if (file.exists(paste0(storedir, "community_data.JSON"))){
                 rv$community_data <- data.table::as.data.table(
                     jsonlite::fromJSON(paste0(storedir, "community_data.JSON")))
+            }
+        }
+        
+        if (nrow(rv$private_data) < 1){
+            if (file.exists(paste0(storedir, "private_data.JSON"))){
+                rv$private_data <- data.table::as.data.table(
+                    jsonlite::fromJSON(paste0(storedir, "private_data.JSON")))
             }
         }
     })

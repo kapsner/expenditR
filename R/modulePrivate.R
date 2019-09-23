@@ -92,52 +92,30 @@ modulePrivateServer <- function(input, output, session, rv, input_re){
     }
   })
   
-  # observe({
-  #   req(rv$private_data)
-  #   
-  #   if (nrow(rv$private_data)>0){
-  #     for (n in names(rv$roommates)){
-  #       if  (n %in% unique(rv$private_data[,get("Buyer")])){
-  #         rv$summary[[n]] <- round(sum(as.numeric(rv$private_data[get("Buyer")==n,get("Money")])), 2)
-  #       }
-  #       
-  #       s_dat <- t(data.table::as.data.table(rv$summary))
-  #       s_tab <- data.table::data.table(
-  #         cbind(
-  #           rownames(s_dat),
-  #           s_dat
-  #         )
-  #       )
-  #       colnames(s_tab) <- c(" ", "Expenditures")
-  #       # calc setdiff of names
-  #       sd <- setdiff(names(rv$roommates), s_tab[,get(" ")])
-  #       if (length(sd) > 0){
-  #         for (m in sd){
-  #           s_tab <- rbind(s_tab, cbind(m, 0), use.names = F)
-  #         }
-  #       }
-  #       rv$summary_table <- s_tab
-  #       
-  #       c_tab <- data.table::data.table(
-  #         cbind("Total",
-  #               round(sum(as.numeric(rv$summary_table[,get("Expenditures")])), 2)
-  #         ))
-  #       colnames(c_tab) <- c(" ", "Sum")
-  #       s <- round(as.numeric(c_tab[1,2])/length(rv$roommates), 2)
-  #       c_tab <- rbind(c_tab, cbind("Sum/roommate", s), use.names = F)
-  #       rv$private_total <- c_tab
-  #       
-  #       
-  #       d_tab <- data.table::data.table()
-  #       for (n in names(rv$roommates)){
-  #         d <- round(as.numeric(c_tab[2,2]) - as.numeric(s_tab[get(" ")==n,get("Expenditures")]), 2)
-  #         d_tab <- rbind(d_tab, cbind(n, d), use.names = F)
-  #       }
-  #       colnames(d_tab) <- c(" ", "Difference")
-  #       rv$private_difference <- d_tab
-  #     }
-  #   }
-  # })
+  observe({
+    req(rv$private_data)
+
+    if (nrow(rv$private_data)>0){
+      outdat <- data.table::data.table()
+      # iterate over buyers
+      for (n in unique(rv$private_data[,get("Buyer")])){
+        tmptb <- rv$private_data[get("Buyer")==n,]
+        # iterate over debtors
+        for (d in unique(tmptb[,get("Debtor")])){
+          rv$private_summary[[n]][[d]] <- round(sum(as.numeric(tmptb[get("Debtor")==d,get("Money")])), 2)
+        }
+      }
+      for (m in names(rv$private_summary)){
+        for (o in names(rv$private_summary[[m]])){
+          outdat <- rbind(outdat, cbind(m, o, rv$private_summary[[m]][[o]]))
+        }
+      }
+      colnames(outdat) <- c("Creditor", "Debtor", "Expenditures")
+      rv$private_summary_table <- outdat
+    }
+    
+    
+  })
 }
 
 

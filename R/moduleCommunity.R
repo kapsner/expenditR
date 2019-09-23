@@ -106,9 +106,9 @@ moduleCommunityServer <- function(input, output, session, rv, input_re){
             s_dat
           )
         )
-        colnames(s_tab) <- c(" ", "Expenditures")
+        colnames(s_tab) <- c("Buyer", "Expenditures")
         # calc setdiff of names
-        sd <- setdiff(names(rv$roommates), s_tab[,get(" ")])
+        sd <- setdiff(names(rv$roommates), s_tab[,get("Buyer")])
         if (length(sd) > 0){
           for (m in sd){
             s_tab <- rbind(s_tab, cbind(m, 0), use.names = F)
@@ -128,7 +128,7 @@ moduleCommunityServer <- function(input, output, session, rv, input_re){
         
         d_tab <- data.table::data.table()
         for (n in names(rv$roommates)){
-          d <- round(as.numeric(c_tab[2,2]) - as.numeric(s_tab[get(" ")==n,get("Expenditures")]), 2)
+          d <- round(as.numeric(c_tab[2,2]) - as.numeric(s_tab[get("Buyer")==n,get("Expenditures")]), 2)
           d_tab <- rbind(d_tab, cbind(n, d), use.names = F)
         }
         colnames(d_tab) <- c(" ", "Difference")
