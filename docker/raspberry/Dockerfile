@@ -45,4 +45,4 @@ RUN cd /home/shiny/${REPO_NAME}/ && \
 
 #RUN chown -R shiny:shiny /home/shiny/${REPO_NAME}
 
-CMD Rscript /home/shiny/${REPO_NAME}/docker/raspberry/app.R
+CMD Rscript /home/shiny/expenditR/docker/raspberry/app.R
