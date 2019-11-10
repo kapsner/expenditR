@@ -5,7 +5,7 @@ Authors@R:
     person(given = "Lorenz",
            family = "Kapsner",
            role = c("cre", "aut"),
-           email = "lorenz.kapsner@web.de")
+           email = "lorenz.kapsner@gmail.com")
 Description: Organize expenditures with your roommates.
 License: GPL-3
 LazyData: true
